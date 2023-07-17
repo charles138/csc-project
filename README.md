@@ -1,5 +1,13 @@
 # csc-project
 
+The webpage for the [dbx Python quickstart](https://dbx.readthedocs.io/en/latest/guides/python/python_quickstart/) provides clear explanations and demonstrations for the following tasks:
+1) Setting up the local environment to run dbx.
+2) Running local unit tests.
+3) Deploying workflows to Databricks.
+4) Launching workflows on the Databricks platform.
+
+
+====================================================================================================================================
 This is a sample project for Databricks, generated via cookiecutter.
 
 While using this project, you need Python 3.X and `pip` or `conda` for package management.
