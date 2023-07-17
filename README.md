@@ -46,108 +46,97 @@ databricks configure --profile charming-aurora --token
 databricks --profile charming-aurora workspace ls /Repos
 ```
 
-
-
-
-
-
-====================================================================================================================================
-This is a sample project for Databricks, generated via cookiecutter.
-
-While using this project, you need Python 3.X and `pip` or `conda` for package management.
-
-## Local environment setup
-
-1. Instantiate a local Python environment via a tool of your choice. This example is based on `conda`, but you can use any environment management tool:
+## 3.	Clone the repository to your local laptop.
 ```bash
-conda create -n csc_project python=3.9
-conda activate csc_project
+git clone https://github.com/<your_name>/csc-project.git
+cd csc-project
 ```
 
-2. If you don't have JDK installed on your local machine, install it (in this example we use `conda`-based installation):
+## 4.	Install GitHub Cli 
 ```bash
-conda install -c conda-forge openjdk=11.0.15
+# For Mac
+brew install gh
+gh auth login
+gh workflow lis
 ```
 
-3. Install project locally (this will also install dev requirements):
+## 5.	Setup GitHub for the repository – create secrets
+```bash
+gh secret set DATABRICKS_HOST
+gh secret set DATABRICKS_TOKEN
+gh secret list
+```
+
+## 6.	Setup at Databricks
+•	Create a lightweight interactive cluster and modify the conf/deployment.yml file to eliminate the waiting times during the testing. Please note that tt’s not recommended for the production environments. For best practices, please refer to [Cluster Type](https://dbx.readthedocs.io/en/latest/concepts/cluster_types/). Note: Replace CharlesCluster11 to your cluster name. 
+•	Create two repository folders: Staging and Production.
+```bash
+####--------------------------------------------------------
+### Production Repo
+####--------------------------------------------------------
+databricks repos create --url "https://github.com/<your name>/csc-project.git" --provider gitHub --path "/Repos/Production/csc-project" --profile dbx-demo
+
+databricks repos update --path "/Repos/Production/csc-project" --tag v5.0.0 --profile charming-aurora
+
+####--------------------------------------------------------
+### Staging Repo
+####--------------------------------------------------------
+databricks repos create --url "https://github.com/<your name>/csc-project.git" --provider gitHub --path "/Repos/Staging/csc-project" --profile charming-aurora
+
+databricks repos update --path "/Repos/Staging/csc-project" --branch main --profile charming-aurora
+```
+
+## 7.	Run unit tests
 ```bash
 pip install -e ".[local,test]"
-```
-
-## Running unit tests
-
-For unit testing, please use `pytest`:
-```
 pytest tests/unit --cov
 ```
 
-Please check the directory `tests/unit` for more details on how to use unit tests.
-In the `tests/unit/conftest.py` you'll also find useful testing primitives, such as local Spark instance with Delta support, local MLflow and DBUtils fixture.
-
-## Running integration tests
-
-There are two options for running integration tests:
-
-- On an all-purpose cluster via `dbx execute`
-- On a job cluster via `dbx launch`
-
-For quicker startup of the job clusters we recommend using instance pools ([AWS](https://docs.databricks.com/clusters/instance-pools/index.html), [Azure](https://docs.microsoft.com/en-us/azure/databricks/clusters/instance-pools/), [GCP](https://docs.gcp.databricks.com/clusters/instance-pools/index.html)).
-
-For an integration test on all-purpose cluster, use the following command:
-```
-dbx execute <workflow-name> --cluster-name=<name of all-purpose cluster>
-```
-
-To execute a task inside multitask job, use the following command:
-```
-dbx execute <workflow-name> \
-    --cluster-name=<name of all-purpose cluster> \
-    --job=<name of the job to test> \
-    --task=<task-key-from-job-definition>
-```
-
-For a test on a job cluster, deploy the job assets and then launch a run from them:
-```
-dbx deploy <workflow-name> --assets-only
-dbx launch <workflow-name>  --from-assets --trace
-```
-
-
-## Interactive execution and development on Databricks clusters
-
-1. `dbx` expects that cluster for interactive execution supports `%pip` and `%conda` magic [commands](https://docs.databricks.com/libraries/notebooks-python-libraries.html).
-2. Please configure your workflow (and tasks inside it) in `conf/deployment.yml` file.
-3. To execute the code interactively, provide either `--cluster-id` or `--cluster-name`.
+## 8.	Run integration tests
 ```bash
-dbx execute <workflow-name> \
-    --cluster-name="<some-cluster-name>"
+dbx execute csc-project-sample-tests --task=main --cluster-name="CharlesCluster11"
+dbx deploy csc-project-sample-tests
+dbx launch csc-project-sample-tests --trace
 ```
 
-Multiple users also can use the same cluster for development. Libraries will be isolated per each user execution context.
-
-## Working with notebooks and Repos
-
-To start working with your notebooks from a Repos, do the following steps:
-
-1. Add your git provider token to your user settings in Databricks
-2. Add your repository to Repos. This could be done via UI, or via CLI command below:
+## 9.	Run ETL task
 ```bash
-databricks repos create --url <your repo URL> --provider <your-provider>
+dbx execute csc-project-sample-etl --task=main --cluster-name="CharlesCluster11"
+dbx deploy csc-project-sample-etl 
+dbx launch csc-project-sample-etl --trace
 ```
-This command will create your personal repository under `/Repos/<username>/csc_project`.
-3. Use `git_source` in your job definition as described [here](https://dbx.readthedocs.io/en/latest/guides/python/devops/notebook/?h=git_source#using-git_source-to-specify-the-remote-source)
 
-## CI/CD pipeline settings
-
-Please set the following secrets or environment variables for your CI provider:
-- `DATABRICKS_HOST`
-- `DATABRICKS_TOKEN`
-
-## Testing and releasing via CI pipeline
-
-- To trigger the CI pipeline, simply push your code to the repository. If CI provider is correctly set, it shall trigger the general testing pipeline
-- To trigger the release pipeline, get the current version from the `csc_project/__init__.py` file and tag the current code version:
+## 10.	Trigger the unit and integration tests (.github/workflows/onpush.yml)
+Note: For the steps 10 ~ 12, please choose proper feathurexx and vxx.xx.xx. 
+```bash
+git checkout main
+git pull origin main
+git checkout -b feature05
+# Append a line to tag.txt, such as “csc 2023-07-17 09:00 feature05”.
+git status
+git add .
+git commit -m "csc 2023-07-17 09:00: feature05"
+git push --set-upstream origin feature05
 ```
-git tag -a v<your-project-version> -m "Release tag for version <your-project-version>"
-git push origin --tags
+
+## 11.	Trigger the deployment of the main branch repository to the staging environment (.github/workflows/after_pull_request_merge.yml)
+```bash
+gh auth login
+gh pr create --title "csc 2023-07-17 09:00: feature05" --body "csc 2023-07-17 09:00: feature05"
+gh pr merge -m -d
 ```
+
+## 12.	Trigger the deployment of workflow and repository to the production environment (.github/workflows/onrelease.yml)
+```bash
+git pull origin main
+# Append a line to tag.txt, such as “csc 2023-07-17 09:10 v2.0.0”.
+git status
+git add .
+git commit -m "csc 2023-07-17 09:10: v2.0.0"
+git push origin main
+
+git tag -a v2.0.0 -m "v2.0.0"
+git push origin v2.0.0
+```
+
+
