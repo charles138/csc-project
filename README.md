@@ -20,6 +20,37 @@ Here are the steps to execute the tests:
 ```bash
 https://github.com/charles138/csc-project.git
 ```
+
+## 2.	Preparing the local environment.
+```bash
+####--------------------------------------------------------
+### Create conda environment
+####--------------------------------------------------------
+conda activate base
+conda create -n charming-aurora python=3.9  -y
+conda activate charming-aurora
+
+####--------------------------------------------------------
+### Install databricks cli and dbx
+####--------------------------------------------------------
+python -m pip install --upgrade pip
+pip install databricks-cli --upgrade
+pip install dbx --upgrade
+databricks --version
+dbx --version
+
+####--------------------------------------------------------
+### Setup Databricks cli
+####--------------------------------------------------------
+databricks configure --profile charming-aurora --token
+databricks --profile charming-aurora workspace ls /Repos
+```
+
+
+
+
+
+
 ====================================================================================================================================
 This is a sample project for Databricks, generated via cookiecutter.
 
