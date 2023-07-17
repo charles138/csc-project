@@ -68,7 +68,7 @@ gh secret list
 ```
 
 ## 6.	Setup at Databricks
-•	Create a lightweight interactive cluster and modify the conf/deployment.yml file to eliminate the waiting times during the testing. Please note that tt’s not recommended for the production environments. For best practices, please refer to [Cluster Type](https://dbx.readthedocs.io/en/latest/concepts/cluster_types/). Note: Replace CharlesCluster11 to your cluster name. 
+•	Create a lightweight interactive cluster and modify the conf/deployment.yml file to eliminate the waiting times during the testing. Please note that tt’s not recommended for the production environments. For best practices, please refer to [Cluster Type](https://dbx.readthedocs.io/en/latest/concepts/cluster_types/). Note: Replace CharlesCluster11 to your cluster name.\ 
 •	Create two repository folders: Staging and Production.
 ```bash
 ####--------------------------------------------------------
