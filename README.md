@@ -6,6 +6,14 @@ The webpage for the [dbx Python quickstart](https://dbx.readthedocs.io/en/latest
 3) Deploying workflows to Databricks.
 4) Launching workflows on the Databricks platform.
 
+In this repository, I followed the quickstart steps to set up the environment, run tests, and deploy the workflows. Additionally, I made some changes to demonstrate the deployment to the staging and production repositories of Databricks. There are various approaches to setting up development, staging, and production environments. I chose to use feature, main, and tag/release branches for the development, staging, and production environments, respectively. Here are the specific changes I made:
+1) In the file tasks/sample_etl_task.py, I avoided using pandas 2.0 to resolve the error "AttributeError: 'DataFrame' object has no attribute 'iteritems'" in pandas 2.0.1.
+2) In the file .github/workflows/onpush.yml, I have restricted the Push trigger to branches that begin with "feature*". This YAML file is responsible for executing the unit and integration tests.
+3) In the file .github/workflows/after_pull_request_merge.yml, I added the deployment of the main branch to the staging repositories of Databricks after a Pull Request is merged.
+4) In the file .github/workflows/onrelease.yml, I included the deployment of the tag/release branch to the production repositories of Databricks after tagging the code.
+
+In addition to the prerequisites mentioned in the quickstart guide, it is recommended to have [GitHub CLI](https://cli.github.com/) installed in your local environment.
+
 
 ====================================================================================================================================
 This is a sample project for Databricks, generated via cookiecutter.
