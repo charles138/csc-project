@@ -75,7 +75,7 @@ gh secret list
 ####--------------------------------------------------------
 ### Production Repo
 ####--------------------------------------------------------
-databricks repos create --url "https://github.com/<your name>/csc-project.git" --provider gitHub --path "/Repos/Production/csc-project" --profile dbx-demo
+databricks repos create --url "https://github.com/<your name>/csc-project.git" --provider gitHub --path "/Repos/Production/csc-project" --profile charming-aurora
 
 databricks repos update --path "/Repos/Production/csc-project" --tag v5.0.0 --profile charming-aurora
 
