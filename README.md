@@ -14,7 +14,12 @@ In this repository, I followed the quickstart steps to set up the environment, r
 
 In addition to the prerequisites mentioned in the quickstart guide, it is recommended to have [GitHub CLI](https://cli.github.com/) installed in your local environment.
 
+Here are the steps to execute the tests:
 
+## 1.	Import the repository to your GitHub. 
+```bash
+https://github.com/charles138/csc-project.git
+```
 ====================================================================================================================================
 This is a sample project for Databricks, generated via cookiecutter.
 
