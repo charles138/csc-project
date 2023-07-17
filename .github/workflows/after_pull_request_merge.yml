@@ -1,12 +1,11 @@
 name: Merge from feature* to main
 
 on:
-  push:
-    branches:
-      - 'feature*'
   pull_request:
     types:
       - closed
+    branches:
+      - 'feature*'
 
 jobs:
   update-staging-repo:
