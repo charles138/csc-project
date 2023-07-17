@@ -1,0 +1,49 @@
+name: Merge from feature* to main
+
+on:
+  push:
+    branches:
+      - 'feature*'
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  update-staging-repo:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref_name, 'main') && github.event.pull_request.merged && startsWith(github.head_ref, 'feature')
+    strategy:
+        max-parallel: 4
+  
+    env:
+        DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+        DATABRICKS_TOKEN:  ${{ secrets.DATABRICKS_TOKEN }}
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+          cache-dependency-path: setup.py
+
+      - name: Install pip, databricks, dbx
+        run: |
+          python -m pip install --upgrade pip
+          pip install databricks-cli
+          pip install dbx --upgrade
+          databricks --version
+          dbx --version
+
+      - name: Run Databricks CLI commands to update main to Staging Repo
+        run: |
+          echo $DATABRICKS_TOKEN > token-file
+          databricks configure --host $DATABRICKS_HOST --token-file token-file
+          rm -f token-file
+          databricks workspace ls /Repos
+          databricks repos update --path "/Repos/Staging/csc-project" --branch main
+
+  
