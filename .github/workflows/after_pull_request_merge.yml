@@ -5,7 +5,7 @@ on:
     types:
       - closed
     branches:
-      - 'feature*'
+      - 'main'
 
 jobs:
   update-staging-repo:
