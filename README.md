@@ -61,6 +61,7 @@ gh workflow lis
 ```
 
 ## 5.	Setup GitHub for the repository – create secrets
+Note: Please enable 'Allow all actions and reusable workflows' if not enabled.
 ```bash
 gh secret set DATABRICKS_HOST
 gh secret set DATABRICKS_TOKEN
