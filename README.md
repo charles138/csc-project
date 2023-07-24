@@ -78,14 +78,10 @@ gh secret list
 ####--------------------------------------------------------
 databricks repos create --url "https://github.com/<your name>/csc-project.git" --provider gitHub --path "/Repos/Production/csc-project" --profile charming-aurora
 
-databricks repos update --path "/Repos/Production/csc-project" --tag v5.0.0 --profile charming-aurora
-
 ####--------------------------------------------------------
 ### Staging Repo
 ####--------------------------------------------------------
 databricks repos create --url "https://github.com/<your name>/csc-project.git" --provider gitHub --path "/Repos/Staging/csc-project" --profile charming-aurora
-
-databricks repos update --path "/Repos/Staging/csc-project" --branch main --profile charming-aurora
 ```
 
 ## 7.	Run unit tests
