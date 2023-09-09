@@ -88,4 +88,5 @@ environments:
             notebook_task:     
               notebook_path: "/Repos/Staging/csc-project/notebooks/notebook_test"
               base_parameters: 
-                primary_key_column_name: "UniqActivityTask"
+                top_k: "50"
+                top_l: "60"
