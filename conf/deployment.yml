@@ -76,7 +76,7 @@ environments:
             notebook_task:
               notebook_path: "/Repos/Staging/csc_project/notebooks/sample_notebook"
       #############################################################
-      # this is a single notebook task job                        #
+      # csc-project-notebook-test                                 #
       #############################################################
       - name: "csc-project-notebook-test"
         tasks:
@@ -90,3 +90,24 @@ environments:
               base_parameters: 
                 top_k: "50"
                 top_l: "60"
+          - task_key: "notebook_test_1"
+            deployment_config:
+              no_package: true # we omit using package since code will be shipped directly from the Repo
+            depends_on:
+              - task_key: "notebook_test"
+            # job_cluster_key: "default"
+            existing_cluster_id: "0729-134934-wrndqqvh"
+            notebook_task:     
+              notebook_path: "/Repos/Staging/csc-project/notebooks/notebook_test_1"
+              base_parameters: 
+                top_k: "50"
+                top_l: "60"
+          - task_key: "notebook_test_2"
+            deployment_config:
+              no_package: true # we omit using package since code will be shipped directly from the Repo
+            depends_on:
+              - task_key: "notebook_test_1"
+            # job_cluster_key: "default"
+            existing_cluster_id: "0729-134934-wrndqqvh"
+            notebook_task:     
+              notebook_path: "/Repos/Staging/csc-project/notebooks/notebook_test_2"
