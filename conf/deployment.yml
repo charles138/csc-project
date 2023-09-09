@@ -75,4 +75,17 @@ environments:
             job_cluster_key: "default"
             notebook_task:
               notebook_path: "/Repos/Staging/csc_project/notebooks/sample_notebook"
-
+      #############################################################
+      # this is a single notebook task job                        #
+      #############################################################
+      - name: "csc-project-notebook-test"
+        tasks:
+          - task_key: "notebook_test"
+            deployment_config:
+              no_package: true # we omit using package since code will be shipped directly from the Repo
+            # job_cluster_key: "default"
+            existing_cluster_id: "0729-134934-wrndqqvh"
+            notebook_task:     
+              notebook_path: "/Repos/Staging/csc-project/notebooks/notebook_test"
+              base_parameters: 
+                primary_key_column_name: "UniqActivityTask"
