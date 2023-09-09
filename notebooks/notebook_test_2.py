@@ -1,7 +1,7 @@
 # Databricks notebook source
-dbutils.widgets.text("top_k", "5")
-top_k = int(dbutils.widgets.get("top_k"))
-dbutils.widgets.text("top_l", "6")
-top_l = int(dbutils.widgets.get("top_l"))
+dbutils.widgets.text("top_m", "5")
+top_m = int(dbutils.widgets.get("top_m"))
+dbutils.widgets.text("top_n", "6")
+top_n = int(dbutils.widgets.get("top_n"))
 
-print(top_k, top_l, top_k * top_l)
+print(top_m, top_n, top_m * top_n)
